@@ -1,0 +1,1 @@
+ /Users/gedewidyadharma/Primuse/primuse_artist_app/.dart_tool/flutter_build/2b5280f15b205125c58b5a6508cfee2b/native_assets.yaml: 

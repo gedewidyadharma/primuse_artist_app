@@ -1,0 +1,1 @@
+export 'artist_item_card_view.dart';

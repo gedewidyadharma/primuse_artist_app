@@ -1,0 +1,159 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../../../core/resources/resources.dart';
+import '../models/models.dart';
+
+class ArtistController extends GetxController {
+  TextEditingController textEditingController = TextEditingController();
+
+  var artists = <Artist>[].obs;
+  var isLoading = true.obs;
+  var state = StateStatus.success.obs;
+  var hasMoreData = true.obs;
+  var isShowSubmitSearch = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchArtists();
+  }
+
+  onChangedSearch(String keyword){
+    if(keyword.isNotEmpty){
+      isShowSubmitSearch(true);
+    }else{
+       isShowSubmitSearch(false);
+    }
+  }
+
+  onSearchSubmited(){
+    debugPrint(textEditingController.text);
+  }
+
+  void fetchArtists() {
+    try {
+      isLoading(true);
+      artists.value = [
+        Artist(
+          rank: 1,
+          name: 'Taylor Swift',
+          imageUrl: 'https://files.kisum.io/artists/1361541.jpg',
+          country: 'US',
+          genres: ['Country', 'Pop', 'Female Vocalists'],
+          currentListeners: 690.5,
+          peakListeners: 965.1,
+        ),
+        Artist(
+          rank: 1,
+          name: 'Taylor Swift',
+          imageUrl: 'https://files.kisum.io/artists/1361541.jpg',
+          country: 'US',
+          genres: ['Country', 'Pop', 'Female Vocalists'],
+          currentListeners: 690.5,
+          peakListeners: 965.1,
+        ),
+        Artist(
+          rank: 1,
+          name: 'Taylor Swift',
+          imageUrl: 'https://files.kisum.io/artists/1361541.jpg',
+          country: 'US',
+          genres: ['Country', 'Pop', 'Female Vocalists'],
+          currentListeners: 690.5,
+          peakListeners: 965.1,
+        ),
+        Artist(
+          rank: 1,
+          name: 'Taylor Swift',
+          imageUrl: 'https://files.kisum.io/artists/1361541.jpg',
+          country: 'US',
+          genres: ['Country', 'Pop', 'Female Vocalists'],
+          currentListeners: 690.5,
+          peakListeners: 965.1,
+        ),
+        Artist(
+          rank: 1,
+          name: 'Taylor Swift',
+          imageUrl: 'https://files.kisum.io/artists/1361541.jpg',
+          country: 'US',
+          genres: ['Country', 'Pop', 'Female Vocalists'],
+          currentListeners: 690.5,
+          peakListeners: 965.1,
+        ),
+        Artist(
+          rank: 1,
+          name: 'Taylor Swift',
+          imageUrl: 'https://files.kisum.io/artists/1361541.jpg',
+          country: 'US',
+          genres: ['Country', 'Pop', 'Female Vocalists'],
+          currentListeners: 690.5,
+          peakListeners: 965.1,
+        ),
+        Artist(
+          rank: 1,
+          name: 'Taylor Swift',
+          imageUrl: 'https://files.kisum.io/artists/1361541.jpg',
+          country: 'US',
+          genres: ['Country', 'Pop', 'Female Vocalists'],
+          currentListeners: 690.5,
+          peakListeners: 965.1,
+        ),
+        Artist(
+          rank: 1,
+          name: 'Taylor Swift',
+          imageUrl: 'https://files.kisum.io/artists/1361541.jpg',
+          country: 'US',
+          genres: ['Country', 'Pop', 'Female Vocalists'],
+          currentListeners: 690.5,
+          peakListeners: 965.1,
+        ),
+        Artist(
+          rank: 1,
+          name: 'Taylor Swift',
+          imageUrl: 'https://files.kisum.io/artists/1361541.jpg',
+          country: 'US',
+          genres: ['Country', 'Pop', 'Female Vocalists'],
+          currentListeners: 690.5,
+          peakListeners: 965.1,
+        ),
+        Artist(
+          rank: 1,
+          name: 'Taylor Swift',
+          imageUrl: 'https://files.kisum.io/artists/1361541.jpg',
+          country: 'US',
+          genres: ['Country', 'Pop', 'Female Vocalists'],
+          currentListeners: 690.5,
+          peakListeners: 965.1,
+        ),
+        Artist(
+          rank: 1,
+          name: 'Taylor Swift',
+          imageUrl: 'https://files.kisum.io/artists/1361541.jpg',
+          country: 'US',
+          genres: ['Country', 'Pop', 'Female Vocalists'],
+          currentListeners: 690.5,
+          peakListeners: 965.1,
+        ),
+        Artist(
+          rank: 1,
+          name: 'Taylor Swift',
+          imageUrl: 'https://files.kisum.io/artists/1361541.jpg',
+          country: 'US',
+          genres: ['Country', 'Pop', 'Female Vocalists'],
+          currentListeners: 690.5,
+          peakListeners: 965.1,
+        ),
+        Artist(
+          rank: 1,
+          name: 'Taylor Swift',
+          imageUrl: 'https://files.kisum.io/artists/1361541.jpg',
+          country: 'US',
+          genres: ['Country', 'Pop', 'Female Vocalists'],
+          currentListeners: 690.5,
+          peakListeners: 965.1,
+        ),
+      ];
+    } finally {
+      isLoading(false);
+    }
+  }
+}

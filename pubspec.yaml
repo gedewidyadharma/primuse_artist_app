@@ -75,6 +75,7 @@ flutter:
     - assets/images/spotify/
     - assets/images/errors/
     - assets/images/placeholder/
+    - assets/images/logo/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

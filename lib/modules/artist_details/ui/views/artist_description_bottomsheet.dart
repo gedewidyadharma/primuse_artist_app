@@ -1,10 +1,10 @@
+import 'package:artist_app/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 
 class ArtistDescriptionSheet extends StatelessWidget {
   final String description;
-
 
   const ArtistDescriptionSheet({
     super.key,
@@ -45,32 +45,23 @@ class ArtistDescriptionSheet extends StatelessWidget {
                 child: Html(
                   data: description,
                   style: {
-            "body": Style(
-              fontSize: FontSize(14),
-              lineHeight: const LineHeight(1.5),
-            ),
-            "em": Style(
-              fontStyle: FontStyle.italic,
-            ),
-          },
+                    "body": Style(
+                      fontSize: FontSize(14),
+                      lineHeight: const LineHeight(1.5),
+                    ),
+                    "em": Style(
+                      fontStyle: FontStyle.italic,
+                    ),
+                  },
                 ),
               ),
             ),
-
             SafeArea(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Get.back();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text('Close'),
+                child: ButtonRounded(
+                  text: "Close",
+                  onClick: () => Get.back(),
                 ),
               ),
             ),

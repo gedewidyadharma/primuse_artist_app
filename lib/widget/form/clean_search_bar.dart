@@ -23,7 +23,7 @@ class CleanSearchBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: Colors.grey.withOpacity(0.1),
         ),

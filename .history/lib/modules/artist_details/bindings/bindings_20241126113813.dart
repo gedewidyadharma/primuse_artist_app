@@ -1,1 +1,0 @@
-export 'artist_details_binding.dart';

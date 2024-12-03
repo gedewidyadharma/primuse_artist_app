@@ -13,7 +13,7 @@ class ResponseProvider extends GetConnect {
           return ResponseData(
             statusCode: response.statusCode,
             message: responseBody['message'],
-            data:  json.encode(responseBody['data']),
+            data:  json.encode(responseBody['data'] ?? responseBody['user']),
           );
 
         default:

@@ -4,14 +4,11 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'core/theme/app_theme.dart';
-import 'helper/helper.dart';
 import 'routes/app_pages.dart';
 
 void main() async {
 WidgetsFlutterBinding.ensureInitialized();
  await GetStorage.init();
-final StorageSession storageSession = StorageSession();
- storageSession.writeTokenJwt("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NmU0MmJmM2NlYjBjM2JmZjU0YTZmYjUiLCJlbWFpbCI6ImluZm9AcHJpbXVzZS5uZXQiLCJuYW1lIjoiUHJpbXVzZSIsImFkbWluIjp0cnVlLCJwZXJtaXNzaW9ucyI6WyI2NzFmMGYwMjk4ZGE1YjcwZTk1NDNkZmEiLCI2NzFmMGYzNjk4ZGE1YjcwZTk1NDNkZmIiLCI2NzFmMGY0Nzk4ZGE1YjcwZTk1NDNkZmMiLCI2NzFmMGY1YTk4ZGE1YjcwZTk1NDNkZmUiLCI2NzFmMGY3Mzk4ZGE1YjcwZTk1NDNkZmYiLCI2NzFmMGY4Mzk4ZGE1YjcwZTk1NDNlMDAiLCI2NzFmMGZmMzk4ZGE1YjcwZTk1NDNlMDEiLCI2NzIwN2EzMTM1MjlhNzUxMjdhZWJiZjciLCI2NzI4NjhjZWUzODY5ZmE5OWRjODU2NGQiXSwiaWF0IjoxNzMzMTA0ODg5LCJleHAiOjE3MzM3MDk2ODl9.jfjZeXDEs8XrXJnEGK7uw_3sRtyg38oyicIOcm7QayE");
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,

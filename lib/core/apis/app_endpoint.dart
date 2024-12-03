@@ -5,6 +5,8 @@ class AppEndpoint {
 
   static String url = "$base/api";
 
+    static String login = '$url/login';
+
   //==================== Artist ====================//
   static String artist = '$url/artists';
 

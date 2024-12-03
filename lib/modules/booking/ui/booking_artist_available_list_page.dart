@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../../../core/core.dart';
@@ -26,11 +27,33 @@ class _Body extends GetView<BookingArtistAvailableListController> {
           children: [
             Padding(
               padding: const EdgeInsets.all(20),
-              child: FilterArtistView(
-                 hint: controller.selectedRegion.value?.name ?? "Choose Region",
-                value: controller.selectedRegion.value,
-                items: controller.listRegion.value,
-                onChanged: controller.setRegion,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: FilterArtistView(
+                      hint: controller.selectedRegion.value?.name ?? "Choose Region",
+                      value: controller.selectedRegion.value,
+                      items: controller.listRegion.value,
+                      onChanged: controller.setRegion,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  InkWell(
+                    onTap: () => controller.showDateRangePickerView(context),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 12.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const FaIcon(
+                        FontAwesomeIcons.calendarDays,
+                        color: AppColors.blackPrimary,
+                        size: 25,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Expanded(
@@ -61,7 +84,7 @@ class _ListArtist extends GetView<BookingArtistAvailableListController> {
           children: [
             Expanded(
               child: ListView.separated(
-                  controller: scrollController,
+                controller: scrollController,
                 itemCount: controller.artists.length,
                 shrinkWrap: true,
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),

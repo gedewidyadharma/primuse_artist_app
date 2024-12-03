@@ -1,3 +1,4 @@
+import 'package:artist_app/widget/widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +12,9 @@ class ArtistDetailsController extends GetxController {
 
   final RxList<MonthlyListener> dataMonthlyListener = <MonthlyListener>[].obs;
   final RxList<CountryChart> dataTopCountries = <CountryChart>[].obs;
-  final RxList<History> dataHistorySpotify = <History>[].obs;
+  final RxList<SpotifyStatsHistories> dataSpotifyStats = <SpotifyStatsHistories>[].obs;
+  final RxList<InstagramStatsHistories> dataInstagramStats = <InstagramStatsHistories>[].obs;
+  final RxList<YoutubeStatsHistories> dataYoutubeStats = <YoutubeStatsHistories>[].obs;
 
   var statePlatformDistribution = StateStatus.loading.obs;
 
@@ -37,7 +40,9 @@ class ArtistDetailsController extends GetxController {
     getArtistDetails();
     getStreamingPlatform();
     getStatsAudience();
-     getStatsPlatform();
+    getSpotifyStats();
+    getInstagramStats();
+    getYoutubeStats();
   }
 
   showArtistBio() {
@@ -54,8 +59,24 @@ class ArtistDetailsController extends GetxController {
       var resp = await _artistWebservices.getArtistDetails(id: artisId!);
       if (resp.statusCode == 200) {
         artist.value = artistsDetailsFromJson(resp.data!);
+      } else {
+        DialogMessage(
+          onConfirm: () {
+            Get.back();
+            Get.back();
+          },
+          message: resp.message!,
+        ).show();
       }
-    } catch (e) {}
+    } catch (e) {
+      DialogMessage(
+        onConfirm: () {
+          Get.back();
+          Get.back();
+        },
+        message: "Something went wrong. Please try again in a moment.",
+      ).show();
+    }
   }
 
   getStreamingPlatform() async {
@@ -79,9 +100,9 @@ class ArtistDetailsController extends GetxController {
     try {
       statePlatformDistribution(StateStatus.loading);
       var params = {
-          "source": "spotify",
-          "offset" : "0",
-          "limit" : "10",
+        "source": "spotify",
+        "offset": "0",
+        "limit": "10",
       };
       var resp = await _artistWebservices.getStatsAudience(artistId: artisId!, queryParams: params);
       if (resp.statusCode == 200) {
@@ -112,19 +133,48 @@ class ArtistDetailsController extends GetxController {
     }
   }
 
-    getStatsPlatform() async {
+  getSpotifyStats() async {
     try {
-      statePlatformDistribution(StateStatus.loading);
       var params = {
-          "source": "spotify",
-          "start_date" : "2022-01-10",
+        "source": "spotify",
+        "start_date": "2022-01-10",
       };
       var resp = await _artistWebservices.getStatsPlatform(artistId: artisId!, queryParams: params);
       if (resp.statusCode == 200) {
-        var data = statsPlatformFromJson(resp.data!);
-        if ((data.historyStats?.data?[0].data?.history ?? []).isNotEmpty) {
-          dataHistorySpotify.addAll(data.historyStats?.data?[0].data?.history ?? []);
-        }
+        var data = spotifyStatsFromJson(resp.data!);
+        dataSpotifyStats.addAll(data.historyStats?.data?[0].data?.history ?? []);
+      } else {}
+    } catch (e) {
+      debugPrint("error $e");
+    }
+  }
+
+  getInstagramStats() async {
+    try {
+      var params = {
+        "source": "instagram",
+        "start_date": "2022-01-10",
+      };
+      var resp = await _artistWebservices.getStatsPlatform(artistId: artisId!, queryParams: params);
+      if (resp.statusCode == 200) {
+        var data = instagramStatsFromJson(resp.data!);
+        dataInstagramStats.addAll(data.historyStats?.data?[0].data?.history ?? []);
+      } else {}
+    } catch (e) {
+      debugPrint("error $e");
+    }
+  }
+
+  getYoutubeStats() async {
+    try {
+      var params = {
+        "source": "youtube",
+        "start_date": "2022-01-10",
+      };
+      var resp = await _artistWebservices.getStatsPlatform(artistId: artisId!, queryParams: params);
+      if (resp.statusCode == 200) {
+        var data = youtubeStatsFromJson(resp.data!);
+        dataYoutubeStats.addAll(data.historyStats?.data?[0].data?.history ?? []);
       } else {}
     } catch (e) {
       debugPrint("error $e");

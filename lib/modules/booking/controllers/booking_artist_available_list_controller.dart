@@ -2,6 +2,7 @@ import 'package:artist_app/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../helper/helper.dart';
 import '../../modules.dart';
 
 class BookingArtistAvailableListController extends GetxController {
@@ -20,6 +21,9 @@ class BookingArtistAvailableListController extends GetxController {
   var currentPage = 1.obs;
   var hasMoreData = true.obs;
 
+  var filteredEvents = <ArtistsAvailable>[].obs;
+  Rx<DateTimeRange?> selectedDateRange = Rx<DateTimeRange?>(null);
+
   @override
   void onInit() {
     super.onInit();
@@ -29,6 +33,19 @@ class BookingArtistAvailableListController extends GetxController {
 
   initData() {
     // setRegion(listRegion[0]);
+  }
+
+  showDateRangePickerView(BuildContext ctx) async {
+    final DateTimeRange? picked = await showDateRangePicker(
+      context: ctx,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2030),
+      initialDateRange: selectedDateRange.value,
+    );
+
+    if (picked != null && picked != selectedDateRange.value) {
+      newFetchArtist();
+    }
   }
 
   Future<void> initRegion() async {
@@ -49,13 +66,12 @@ class BookingArtistAvailableListController extends GetxController {
 
         listRegion.add(FilterSearch(id: 'all', name: 'All'));
         final region = dataResp
-                .where((element) => element.iso2 != null && element.name != null)
-                .map((element) => FilterSearch(
-                      id: element.iso2!,
-                      name: element.name!,
-                    ))
-                .toList() ??
-            [];
+            .where((element) => element.iso2 != null && element.name != null)
+            .map((element) => FilterSearch(
+                  id: element.iso2!,
+                  name: element.name!,
+                ))
+            .toList();
 
         listRegion.addAll(region);
         setRegion(listRegion[0]);
@@ -68,7 +84,7 @@ class BookingArtistAvailableListController extends GetxController {
     }
   }
 
-    void newFetchArtist() {
+  void newFetchArtist() {
     currentPage.value = 1;
     hasMoreData.value = true;
     artists.clear();
@@ -91,6 +107,7 @@ class BookingArtistAvailableListController extends GetxController {
       artists.addAll(newArtists);
       currentPage.value++;
     } else {
+      state.value = artists.isEmpty ? StateStatus.emtpy : StateStatus.success;
       hasMoreData.value = false;
     }
 
@@ -99,7 +116,16 @@ class BookingArtistAvailableListController extends GetxController {
 
   Future<List<ArtistsAvailable>> fetchArtistsAvailable({required int page}) async {
     try {
-      var params = {"seller": "primuse", "limit": "10", "page": page.toString()};
+      var params = {
+        "seller": "primuse",
+        "limit": "10",
+        "page": page.toString(),
+      };
+
+      if (selectedDateRange.value !=null) {
+        params["from"] = DateFormating.changeFormatFromDatetime(format: "yyyy-MM-dd", date: selectedDateRange.value!.start) ;
+        params["to"] = DateFormating.changeFormatFromDatetime(format: "yyyy-MM-dd", date: selectedDateRange.value!.end);
+      }
       var resp = await artistWebservices.getArtistAvailable(country: selectedRegion.value?.id ?? "", queryParams: params);
       if (resp.statusCode == 200) {
         state.value = StateStatus.success;

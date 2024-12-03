@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'models.dart';
+
 ArtistDetails artistsDetailsFromJson(String str) => ArtistDetails.fromJson(json.decode(str));
 
 String artistsDetailsToJson(ArtistDetails data) => json.encode(data.toJson());
@@ -15,7 +17,7 @@ class ArtistDetails {
     String? sortName;
     String? type;
     int? activeFrom;
-    _Country? country;
+    CountryNameIso? country;
     List<String>? genres;
     String? bio;
     String? gid;
@@ -58,7 +60,7 @@ class ArtistDetails {
         sortName: json["sortName"],
         type: json["type"],
         activeFrom: json["activeFrom"],
-        country: json["country"] == null ? null : _Country.fromJson(json["country"]),
+        country: json["country"] == null ? null : CountryNameIso.fromJson(json["country"]),
         genres: json["genres"] == null ? [] : List<String>.from(json["genres"]!.map((x) => x)),
         bio: json["bio"],
         gid: json["gid"],
@@ -93,26 +95,6 @@ class ArtistDetails {
         "data_platforms": dataPlatforms?.toJson(),
         "platforms": Map.from(platforms!).map((k, v) => MapEntry<String, dynamic>(k, v?.toJson())),
         "rank": rank,
-    };
-}
-
-class _Country {
-    String? name;
-    String? iso2;
-
-    _Country({
-        this.name,
-        this.iso2,
-    });
-
-    factory _Country.fromJson(Map<String, dynamic> json) => _Country(
-        name: json["name"],
-        iso2: json["iso2"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "name": name,
-        "iso2": iso2,
     };
 }
 

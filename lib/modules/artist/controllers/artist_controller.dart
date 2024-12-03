@@ -48,6 +48,7 @@ class ArtistController extends GetxController {
       artists.addAll(newArtists);
       currentPage.value++;
     } else {
+       state.value = artists.isEmpty ? StateStatus.emtpy : StateStatus.success;
       hasMoreData.value = false;
     }
 

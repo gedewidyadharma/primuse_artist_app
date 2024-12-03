@@ -53,10 +53,12 @@ class _Body extends GetView<ArtistDetailsController> {
           _GraphListener(),
           const SizedBox(height: 30),
           _TopCountryView(),
-          const SizedBox(height: 30),
           _MonthlyListenerView(),
-          const SizedBox(height: 30),
           _SpotifyGraph(),
+          const SizedBox(height: 30),
+          _InstagramGraph(),
+          const SizedBox(height: 30),
+          _YoutubeGraph(),
           const SizedBox(height: 50),
         ],
       ),
@@ -236,7 +238,7 @@ class _TopCountryView extends GetView<ArtistDetailsController> {
               style: Theme.of(context).textTheme.titleSmall!,
             ),
             const SizedBox(height: 10),
-            DataTable(
+            controller.dataTopCountries.value.isNotEmpty ? DataTable(
               columnSpacing: 0,
               columns: [
                 DataColumn(
@@ -267,7 +269,7 @@ class _TopCountryView extends GetView<ArtistDetailsController> {
                   ],
                 );
               }),
-            ),
+            ) : const ShimmerDataTable(),
           ],
         ),
       ),
@@ -293,7 +295,7 @@ class _MonthlyListenerView extends GetView<ArtistDetailsController> {
               style: Theme.of(context).textTheme.titleSmall!,
             ),
             const SizedBox(height: 10),
-            SingleChildScrollView(
+            controller.dataMonthlyListener.value.isNotEmpty ? SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 columns: [
@@ -366,7 +368,7 @@ class _MonthlyListenerView extends GetView<ArtistDetailsController> {
                   );
                 }),
               ),
-            )
+            ): const ShimmerDataTable()
           ],
         ),
       ),
@@ -378,52 +380,158 @@ class _SpotifyGraph extends GetView<ArtistDetailsController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
+      () => controller.dataSpotifyStats.isNotEmpty
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const FaIcon(FontAwesomeIcons.spotify),
-                const SizedBox(width: 10),
-                Text(
-                  'Spotify Listeners',
-                  style: Theme.of(context).textTheme.titleMedium,
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      const FaIcon(FontAwesomeIcons.spotify),
+                      const SizedBox(width: 10),
+                      Text(
+                        'Spotify Insight',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    ],
+                  ),
+                ),
+                SfCartesianChart(
+                  primaryXAxis: DateTimeAxis(
+                    minimum: controller.dataSpotifyStats.first.date,
+                    maximum: controller.dataSpotifyStats.last.date,
+                  ),
+                  primaryYAxis: NumericAxis(
+                    numberFormat: NumberFormat.compact(),
+                  ),
+                  legend: const Legend(
+                    isVisible: true,
+                    position: LegendPosition.bottom,
+                  ),
+                  zoomPanBehavior: ZoomPanBehavior(enablePanning: true, enablePinching: true, zoomMode: ZoomMode.xy),
+                  series: <LineSeries<SpotifyStatsHistories, DateTime>>[
+                    LineSeries<SpotifyStatsHistories, DateTime>(
+                      name: "Monthly Listener",
+                      dataSource: controller.dataSpotifyStats.value,
+                      xValueMapper: (SpotifyStatsHistories data, _) => data.date,
+                      yValueMapper: (SpotifyStatsHistories data, _) => data.monthlyListenersCurrent,
+                    ),
+                    LineSeries<SpotifyStatsHistories, DateTime>(
+                      name: "Follower",
+                      dataSource: controller.dataSpotifyStats.value,
+                      xValueMapper: (SpotifyStatsHistories data, _) => data.date,
+                      yValueMapper: (SpotifyStatsHistories data, _) => data.followersTotal,
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ),
-          SfCartesianChart(
-            primaryXAxis: DateTimeAxis(
-              minimum: controller.dataHistorySpotify.first.date,
-              maximum: controller.dataHistorySpotify.last.date,
-            ),
-            primaryYAxis: NumericAxis(
-              numberFormat: NumberFormat.compact(),
-            ),
-            legend: const Legend(
-              isVisible: true,
-              position: LegendPosition.bottom,
-            ),
-            zoomPanBehavior: ZoomPanBehavior(enablePanning: true, enablePinching: true, zoomMode: ZoomMode.xy),
-            series: <LineSeries<History, DateTime>>[
-              LineSeries<History, DateTime>(
-                name: "Monthly Listener",
-                dataSource: controller.dataHistorySpotify.value,
-                xValueMapper: (History sales, _) => sales.date,
-                yValueMapper: (History sales, _) => sales.monthlyListenersCurrent,
-              ),
-              LineSeries<History, DateTime>(
-                name: "Follower",
-                dataSource: controller.dataHistorySpotify.value,
-                xValueMapper: (History sales, _) => sales.date,
-                yValueMapper: (History sales, _) => sales.followersTotal,
-              ),
-            ],
-          ),
-        ],
-      ),
+            )
+          : Container(),
+    );
+  }
+}
+
+class _InstagramGraph extends GetView<ArtistDetailsController> {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => controller.dataInstagramStats.isNotEmpty
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      const FaIcon(FontAwesomeIcons.instagram),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          'Instagram Insight',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SfCartesianChart(
+                  primaryXAxis: DateTimeAxis(
+                    minimum: controller.dataInstagramStats.first.date,
+                    maximum: controller.dataInstagramStats.last.date,
+                  ),
+                  primaryYAxis: NumericAxis(
+                    numberFormat: NumberFormat.compact(),
+                  ),
+                  legend: const Legend(
+                    isVisible: true,
+                    position: LegendPosition.bottom,
+                  ),
+                  zoomPanBehavior: ZoomPanBehavior(enablePanning: true, enablePinching: true, zoomMode: ZoomMode.xy),
+                  series: <LineSeries<InstagramStatsHistories, DateTime>>[
+                    LineSeries<InstagramStatsHistories, DateTime>(
+                      name: "Followers Total",
+                      dataSource: controller.dataInstagramStats.value,
+                      xValueMapper: (InstagramStatsHistories data, _) => data.date,
+                      yValueMapper: (InstagramStatsHistories data, _) => data.followersTotal,
+                    ),
+                  ],
+                ),
+              ],
+            )
+          : Container(),
+    );
+  }
+}
+
+class _YoutubeGraph extends GetView<ArtistDetailsController> {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => controller.dataYoutubeStats.isNotEmpty
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      const FaIcon(FontAwesomeIcons.youtube),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          'Youtube Insight',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SfCartesianChart(
+                  primaryXAxis: DateTimeAxis(
+                    minimum: controller.dataYoutubeStats.first.date,
+                    maximum: controller.dataYoutubeStats.last.date,
+                  ),
+                  primaryYAxis: NumericAxis(
+                    numberFormat: NumberFormat.compact(),
+                  ),
+                  legend: const Legend(
+                    isVisible: true,
+                    position: LegendPosition.bottom,
+                  ),
+                  zoomPanBehavior: ZoomPanBehavior(enablePanning: true, enablePinching: true, zoomMode: ZoomMode.xy),
+                  series: <LineSeries<YoutubeStatsHistories, DateTime>>[
+                     LineSeries<YoutubeStatsHistories, DateTime>(
+                      name: "Views Total",
+                      dataSource: controller.dataYoutubeStats.value,
+                      xValueMapper: (YoutubeStatsHistories data, _) => data.date,
+                      yValueMapper: (YoutubeStatsHistories data, _) => data.videoViewsTotal,
+                    ),
+                  ],
+                ),
+              ],
+            )
+          : Container(),
     );
   }
 }

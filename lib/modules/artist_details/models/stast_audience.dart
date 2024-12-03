@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'models.dart';
+
 StatsAudience statsAudienceFromJson(String str) => StatsAudience.fromJson(json.decode(str));
 
 String statsAudienceToJson(StatsAudience data) => json.encode(data.toJson());
@@ -11,7 +13,7 @@ String statsAudienceToJson(StatsAudience data) => json.encode(data.toJson());
 class StatsAudience {
     int? id;
     String? name;
-    StatsAudienceCountry? country;
+    CountryNameIso? country;
     List<String>? statsIds;
     List<Audience>? audience;
 
@@ -26,7 +28,7 @@ class StatsAudience {
     factory StatsAudience.fromJson(Map<String, dynamic> json) => StatsAudience(
         id: json["id"],
         name: json["name"],
-        country: json["country"] == null ? null : StatsAudienceCountry.fromJson(json["country"]),
+        country: json["country"] == null ? null : CountryNameIso.fromJson(json["country"]),
         statsIds: json["stats_ids"] == null ? [] : List<String>.from(json["stats_ids"]!.map((x) => x)),
         audience: json["audience"] == null ? [] : List<Audience>.from(json["audience"]!.map((x) => Audience.fromJson(x))),
     );
@@ -304,22 +306,3 @@ class MonthlyListener {
     };
 }
 
-class StatsAudienceCountry {
-    String? name;
-    String? iso2;
-
-    StatsAudienceCountry({
-        this.name,
-        this.iso2,
-    });
-
-    factory StatsAudienceCountry.fromJson(Map<String, dynamic> json) => StatsAudienceCountry(
-        name: json["name"],
-        iso2: json["iso2"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "name": name,
-        "iso2": iso2,
-    };
-}

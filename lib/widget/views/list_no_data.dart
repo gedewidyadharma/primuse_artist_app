@@ -1,3 +1,4 @@
+import 'package:artist_app/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -27,7 +28,7 @@ class ListNoData extends StatelessWidget {
           message ?? "Data not available",
           textAlign: TextAlign.center,
           style: const TextStyle(
-              color: Color(0xFFA4A4A4),
+              color: AppColors.blackPrimary,
               fontWeight: FontWeight.w400,
               fontSize: 12,
               fontFamily: "Poppins"),

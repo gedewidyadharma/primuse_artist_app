@@ -34,6 +34,11 @@ class BookingArtistAvailableListController extends GetxController {
   initData() {
     // setRegion(listRegion[0]);
   }
+  
+  resetFilterDate(){
+     selectedDateRange.value = null;
+     newFetchArtist();
+  }
 
   showDateRangePickerView(BuildContext ctx) async {
     final DateTimeRange? picked = await showDateRangePicker(
@@ -44,6 +49,7 @@ class BookingArtistAvailableListController extends GetxController {
     );
 
     if (picked != null && picked != selectedDateRange.value) {
+      selectedDateRange.value = picked;
       newFetchArtist();
     }
   }

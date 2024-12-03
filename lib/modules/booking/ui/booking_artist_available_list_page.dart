@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/core.dart';
 import '../../../widget/widget.dart';
@@ -56,6 +57,27 @@ class _Body extends GetView<BookingArtistAvailableListController> {
                 ],
               ),
             ),
+            if (controller.selectedDateRange.value != null)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Filter : ${DateFormat('dd MMM yyyy').format(controller.selectedDateRange.value!.start)} ~ ${DateFormat('dd MMM yyyy').format(controller.selectedDateRange.value!.end)}',
+                        style: Theme.of(context).textTheme.labelMedium,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () => controller.resetFilterDate(),
+                      child: Text(
+                        "Reset",
+                        style: Theme.of(context).textTheme.labelMedium!.copyWith(color: Colors.red),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             Expanded(
               child: _ListArtist(),
             )

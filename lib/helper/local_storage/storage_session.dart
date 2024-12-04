@@ -7,15 +7,15 @@ class StorageSession {
 
   static const String keyJwt = "keyTokenJwt";
 
-  writeSession(String value) {
+  writeUser(String value) {
     _storage.write(key, value);
   }
 
-  String readSession() {
+  String readUser() {
     return _storage.read(key) ?? "";
   }
 
-  void clearSession() {
+  void clearUser() {
     _storage.remove(key);
   }
 

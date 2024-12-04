@@ -29,7 +29,7 @@ class _Body extends GetView<LoginController> {
             Center(
               child: Image.asset(
                 'assets/images/logo/primuse_logo_black.png',
-                width: 200,
+                  width: Get.width * 0.5,
                 fit: BoxFit.fitWidth,
               ),
             ),
@@ -42,13 +42,22 @@ class _Body extends GetView<LoginController> {
             TextFieldBorderRounded(
               textController: controller.textEditingControllerEmail,
               label: "Email",
+              textInputType: TextInputType.emailAddress,
               onChanged: (value) => controller.onChangeForm(),
             ),
             const SizedBox(height: 30),
             TextFieldBorderRounded(
               textController: controller.textEditingControllerPassword,
               label: "Password",
-                onChanged: (value) => controller.onChangeForm(),
+              onChanged: (value) => controller.onChangeForm(),
+              obscureText: controller.isObsecurePassword.value,
+              suffixIcon: IconButton(
+                icon: Icon(
+                  controller.isObsecurePassword.isTrue ? Icons.visibility : Icons.visibility_off,
+                  color: AppColors.primary,
+                ),
+                onPressed: () => controller.onClickObsecurePassword(),
+              ),
             ),
             const SizedBox(height: 50),
             ButtonRounded(

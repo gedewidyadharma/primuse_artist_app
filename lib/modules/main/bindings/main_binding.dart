@@ -9,5 +9,6 @@ class MainBinding extends Bindings {
     Get.put(HomeController());
     Get.put(ArtistController());
     Get.put(BookingArtistAvailableListController());
+     Get.put(ProfileController());
   }
 }

@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.artist_app"
+    namespace = "com.primuse.artist_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -21,13 +21,24 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.artist_app"
+        applicationId = "com.primuse.artist_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('keystore_primuse.jks')
+            storePassword 'primuse'
+            keyAlias = 'primuse'
+            keyPassword 'primuse'
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
     }
 
     buildTypes {

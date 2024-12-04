@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,14 +8,15 @@ import '../../../widget/widget.dart';
 import '../../modules.dart';
 
 class LoginController extends GetxController {
-
-  AuthWebservices  authWebservices = AuthWebservices();
+  AuthController authController = Get.find();
+  AuthWebservices authWebservices = AuthWebservices();
   TextEditingController textEditingControllerEmail = TextEditingController();
   TextEditingController textEditingControllerPassword = TextEditingController();
 
-    final StorageSession _storageSession = StorageSession();
+  final StorageSession _storageSession = StorageSession();
 
   var isAllValid = false.obs;
+  var isObsecurePassword = true.obs;
 
   onChangeForm() {
     if (textEditingControllerEmail.text.isNotEmpty && textEditingControllerPassword.text.isNotEmpty) {
@@ -27,13 +26,17 @@ class LoginController extends GetxController {
     }
   }
 
-   clearTextController() {
+  clearTextController() {
     textEditingControllerEmail.clear();
     textEditingControllerPassword.clear();
   }
 
-  onClickLogin(){
-    if(isAllValid.isTrue){
+  onClickObsecurePassword() {
+    isObsecurePassword.toggle();
+  }
+
+  onClickLogin() {
+    if (isAllValid.isTrue) {
       doLogin();
     }
   }
@@ -50,9 +53,11 @@ class LoginController extends GetxController {
       if (resp.statusCode == 200) {
         var user = userFromJson(resp.data!);
         _storageSession.writeTokenJwt(user.token!);
+        _storageSession.writeUser(resp.data!);
+        authController.user.value = user;
         clearTextController();
         Loading().hide();
-        Get.offNamed(AppRoutes.main);
+        Get.offAllNamed(AppRoutes.main);
       } else {
         Loading().hide();
         DialogMessage(message: resp.message!).show();

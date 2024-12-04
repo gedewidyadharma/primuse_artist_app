@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'core/theme/app_theme.dart';
+import 'modules/modules.dart';
 import 'routes/app_pages.dart';
 
 void main() async {
@@ -31,7 +32,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       getPages: AppPages.routes,
       initialRoute: AppPages.initial,
-      // initialBinding: AuthBinding(),
+      initialBinding: AuthBinding(),
     );
   }
 }

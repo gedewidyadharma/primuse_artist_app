@@ -10,23 +10,27 @@ class SplashPage extends GetView<SplashController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          const Spacer(),
-          Image.asset(
-             'assets/images/logo/primuse_logo_black.png',
-            width: Get.width * 0.35,
-            fit: BoxFit.scaleDown,
-          ),
-          const Expanded(
-            child: Center(
+      body: SafeArea(
+        child: Column(
+          children: [
+            const Spacer(),
+            Center(
+                child: Image.asset(
+                  'assets/images/logo/primuse_logo_black.png',
+                    width: Get.width * 0.5,
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+             const Spacer(),
+            const Center(
               child: CircularProgressIndicator(
                 color: AppColors.primary,
               ),
             ),
-          ),
-          const SizedBox(height: 25),
-        ],
+            const Spacer(),
+            const SizedBox(height: 25),
+          ],
+        ),
       ),
     );
   }

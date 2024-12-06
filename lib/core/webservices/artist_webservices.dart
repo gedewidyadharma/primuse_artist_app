@@ -84,4 +84,14 @@ class ArtistWebservices {
       return ResponseError.defaultError();
     }
   }
+
+  Future<ResponseData> getUpcomingShow({Map<String, dynamic>? queryParams}) async {
+    try {
+      var resp = await Api().get(url: AppEndpoint.getUpcomingShow, queryParams: queryParams, headers: HttpHeader.headers);
+      return resp;
+    } catch (e) {
+      LoggerHelper.error("getUpcomingShow error --> $e");
+      return ResponseError.defaultError();
+    }
+  }
 }

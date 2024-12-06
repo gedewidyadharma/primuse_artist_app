@@ -23,6 +23,8 @@ class AppEndpoint {
 
   static String getTopArtistByCityAndRegion({required String city, required String region, required String page}) => '$artist/top/$city/$region?page=$page&limit=10';
 
+    static String getUpcomingShow = '$artist/up-coming';
+  
   //==================== Region ====================//
   static String region = '$url/regions';
 

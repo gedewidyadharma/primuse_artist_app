@@ -16,6 +16,8 @@ class ArtistDetailsController extends GetxController {
   final RxList<InstagramStatsHistories> dataInstagramStats = <InstagramStatsHistories>[].obs;
   final RxList<YoutubeStatsHistories> dataYoutubeStats = <YoutubeStatsHistories>[].obs;
 
+  final RxList<UpcomingShow> upcomingShow = <UpcomingShow>[].obs;
+
   var statePlatformDistribution = StateStatus.loading.obs;
 
   var artist = Rxn<ArtistDetails>();
@@ -59,6 +61,7 @@ class ArtistDetailsController extends GetxController {
       var resp = await _artistWebservices.getArtistDetails(id: artisId!);
       if (resp.statusCode == 200) {
         artist.value = artistsDetailsFromJson(resp.data!);
+        getUpcomingShow(); // place here, for waiting for artist name
       } else {
         DialogMessage(
           onConfirm: () {
@@ -76,6 +79,28 @@ class ArtistDetailsController extends GetxController {
         },
         message: "Something went wrong. Please try again in a moment.",
       ).show();
+    }
+  }
+
+  onClickTicketUpcomingShow() {
+    
+  }
+
+  void showAllUpcomingShow() {
+    UpcomingShowBottomsheet.show(upcomingShow: upcomingShow);
+  }
+
+  getUpcomingShow() async {
+    try {
+      var params = {
+        "name": artist.value?.name ?? "",
+      };
+      var resp = await _artistWebservices.getUpcomingShow(queryParams: params);
+      if (resp.statusCode == 200) {
+        upcomingShow.value = upcomingShowFromJson(resp.data!);
+      }
+    } catch (e) {
+      debugPrint("error $e");
     }
   }
 

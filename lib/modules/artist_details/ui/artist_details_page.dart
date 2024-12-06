@@ -50,6 +50,7 @@ class _Body extends GetView<ArtistDetailsController> {
         children: [
           _ImageArtist(),
           _Description(),
+          _UpcomingShow(),
           _GraphListener(),
           const SizedBox(height: 30),
           _TopCountryView(),
@@ -160,6 +161,54 @@ class _Description extends GetView<ArtistDetailsController> {
   }
 }
 
+class _UpcomingShow extends GetView<ArtistDetailsController> {
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => controller.upcomingShow.isNotEmpty
+          ? Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Upcoming Show',
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                      ),
+                      if (controller.upcomingShow.length > 3)
+                        InkWell(
+                          onTap: () => controller.showAllUpcomingShow(),
+                          child: Text(
+                            'Show All',
+                            style: Theme.of(context).textTheme.labelLarge!.copyWith(color: Colors.blue),
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  ListView.separated(
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller.upcomingShow.length > 3 ? 3 : controller.upcomingShow.length ,
+                    separatorBuilder: (context, index) => const Divider(height: 40),
+                    itemBuilder: (context, index) {
+                      var data = controller.upcomingShow.value[index];
+                      return UpcomingShowItemView(show: data);
+                    },
+                  ),
+                ],
+              ),
+            )
+          : Container(),
+    );
+  }
+}
+
 class _GraphListener extends GetView<ArtistDetailsController> {
   @override
   Widget build(BuildContext context) {
@@ -238,38 +287,40 @@ class _TopCountryView extends GetView<ArtistDetailsController> {
               style: Theme.of(context).textTheme.titleSmall!,
             ),
             const SizedBox(height: 10),
-            controller.dataTopCountries.value.isNotEmpty ? DataTable(
-              columnSpacing: 0,
-              columns: [
-                DataColumn(
-                  label: Text(
-                    '#',
-                    style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
-                  ),
-                ),
-                DataColumn(
-                  label: SizedBox(
-                    width: Get.width * 0.6,
-                    child: Text(
-                      'Country',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ),
-              ],
-              rows: List.generate(controller.dataTopCountries.value.length, (index) {
-                var data = controller.dataTopCountries[index];
-                return DataRow(
-                  cells: [
-                    DataCell(Text(data.rank?.toString() ?? "-")),
-                    DataCell(Text(
-                      "${data.country?.flag?.emoji ?? "🏳️"}   ${data.country?.name ?? data.countryCode ?? ""}",
-                      style: Theme.of(context).textTheme.labelMedium,
-                    )),
-                  ],
-                );
-              }),
-            ) : const ShimmerDataTable(),
+            controller.dataTopCountries.value.isNotEmpty
+                ? DataTable(
+                    columnSpacing: 0,
+                    columns: [
+                      DataColumn(
+                        label: Text(
+                          '#',
+                          style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      DataColumn(
+                        label: SizedBox(
+                          width: Get.width * 0.6,
+                          child: Text(
+                            'Country',
+                            style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ),
+                    ],
+                    rows: List.generate(controller.dataTopCountries.value.length, (index) {
+                      var data = controller.dataTopCountries[index];
+                      return DataRow(
+                        cells: [
+                          DataCell(Text(data.rank?.toString() ?? "-")),
+                          DataCell(Text(
+                            "${data.country?.flag?.emoji ?? "🏳️"}   ${data.country?.name ?? data.countryCode ?? ""}",
+                            style: Theme.of(context).textTheme.labelMedium,
+                          )),
+                        ],
+                      );
+                    }),
+                  )
+                : const ShimmerDataTable(),
           ],
         ),
       ),
@@ -295,80 +346,82 @@ class _MonthlyListenerView extends GetView<ArtistDetailsController> {
               style: Theme.of(context).textTheme.titleSmall!,
             ),
             const SizedBox(height: 10),
-            controller.dataMonthlyListener.value.isNotEmpty ? SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: DataTable(
-                columns: [
-                  DataColumn(
-                    label: Text(
-                      '#',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'City',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Current',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Peak',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Peak Date',
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ],
-                rows: List.generate(controller.dataMonthlyListener.value.length, (index) {
-                  var data = controller.dataMonthlyListener[index];
-                  return DataRow(
-                    cells: [
-                      DataCell(
-                        Text(
-                          data.rank?.toString() ?? "-",
-                          style: Theme.of(context).textTheme.labelMedium,
+            controller.dataMonthlyListener.value.isNotEmpty
+                ? SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: DataTable(
+                      columns: [
+                        DataColumn(
+                          label: Text(
+                            '#',
+                            style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      DataCell(
-                        Text(
-                          "${data.country?.flag?.emoji ?? ""}   ${data.cityName ?? ""}",
-                          style: Theme.of(context).textTheme.labelMedium,
+                        DataColumn(
+                          label: Text(
+                            'City',
+                            style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      DataCell(
-                        Text(
-                          NumberFormating.formatNumberSeparator(data.currentListeners ?? 0),
-                          style: Theme.of(context).textTheme.labelMedium,
+                        DataColumn(
+                          label: Text(
+                            'Current',
+                            style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      DataCell(
-                        Text(
-                          NumberFormating.formatNumberSeparator(data.peakListeners ?? 0),
-                          style: Theme.of(context).textTheme.labelMedium,
+                        DataColumn(
+                          label: Text(
+                            'Peak',
+                            style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                      DataCell(
-                        Text(
-                          DateFormating.changeFormatFromString(format: "dd-MMM-yyyy", date: data.peakDate ?? ""),
-                          style: Theme.of(context).textTheme.labelMedium,
+                        DataColumn(
+                          label: Text(
+                            'Peak Date',
+                            style: Theme.of(context).textTheme.labelMedium!.copyWith(fontWeight: FontWeight.w600),
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                }),
-              ),
-            ): const ShimmerDataTable()
+                      ],
+                      rows: List.generate(controller.dataMonthlyListener.value.length, (index) {
+                        var data = controller.dataMonthlyListener[index];
+                        return DataRow(
+                          cells: [
+                            DataCell(
+                              Text(
+                                data.rank?.toString() ?? "-",
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                "${data.country?.flag?.emoji ?? ""}   ${data.cityName ?? ""}",
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                NumberFormating.formatNumberSeparator(data.currentListeners ?? 0),
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                NumberFormating.formatNumberSeparator(data.peakListeners ?? 0),
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                DateFormating.changeFormatFromString(format: "dd-MMM-yyyy", date: data.peakDate ?? ""),
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            ),
+                          ],
+                        );
+                      }),
+                    ),
+                  )
+                : const ShimmerDataTable()
           ],
         ),
       ),
@@ -521,7 +574,7 @@ class _YoutubeGraph extends GetView<ArtistDetailsController> {
                   ),
                   zoomPanBehavior: ZoomPanBehavior(enablePanning: true, enablePinching: true, zoomMode: ZoomMode.xy),
                   series: <LineSeries<YoutubeStatsHistories, DateTime>>[
-                     LineSeries<YoutubeStatsHistories, DateTime>(
+                    LineSeries<YoutubeStatsHistories, DateTime>(
                       name: "Views Total",
                       dataSource: controller.dataYoutubeStats.value,
                       xValueMapper: (YoutubeStatsHistories data, _) => data.date,

@@ -6,3 +6,4 @@ export 'spotify_stats.dart';
 export 'instagram_stats.dart';
 export 'country_name_iso.dart';
 export 'youtube_stats.dart';
+export 'upcoming_show.dart';
